@@ -48,15 +48,42 @@ export const contactEnquirySchema = z.object({
   message: z.string().trim().min(5, 'Please enter a short message.').max(1200),
 });
 
+const usernameRegex = /^[a-zA-Z0-9._-]{3,40}$/;
+
 export const adminSetupSchema = z.object({
-  email: z.string().trim().email('Please enter a valid admin email.'),
+  username: z
+    .string()
+    .trim()
+    .min(3, 'User ID must be at least 3 characters.')
+    .max(40, 'User ID must be 40 characters or fewer.')
+    .regex(usernameRegex, 'User ID can only contain letters, numbers, dots, underscores, or hyphens.'),
+  email: z.string().trim().email('Please enter a valid admin email address.'),
   password: z.string().min(8, 'Password must be at least 8 characters.').max(128),
   fullName: z.string().trim().min(2).max(120).optional(),
 });
 
 export const adminLoginSchema = z.object({
+  identifier: z.string().trim().max(160).optional().default(''),
   email: z.string().trim().max(160).optional().default(''),
   password: z.string().min(1, 'Password is required.').max(128),
+});
+
+export const adminUpdateCredentialsSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required to verify your identity.').max(128),
+  newUsername: z
+    .string()
+    .trim()
+    .min(3, 'User ID must be at least 3 characters.')
+    .max(40)
+    .regex(usernameRegex, 'User ID can only contain letters, numbers, dots, underscores, or hyphens.')
+    .optional(),
+  newEmail: z.string().trim().email('Please enter a valid email address.').optional(),
+  newPassword: z
+    .string()
+    .min(8, 'New password must be at least 8 characters.')
+    .max(128)
+    .or(z.literal(''))
+    .optional(),
 });
 
 export const doctorUpsertSchema = z.object({

@@ -13,6 +13,7 @@ import {
 import {
   adminLoginSchema,
   adminSetupSchema,
+  adminUpdateCredentialsSchema,
   blockedDateSchema,
   bookingRequestSchema,
   contactEnquirySchema,
@@ -86,7 +87,8 @@ export function createApiRouter(): Router {
   // =========================================================================
   // PUBLIC ROUTES (Strictly public catalog only — zero private customer PII)
   // =========================================================================
-  router.get('/public/site', (_req, res) => {
+  router.get('/public/site', async (_req, res) => {
+    await store.syncFromSupabase();
     res.json(store.getPublicPayload());
   });
 
@@ -160,7 +162,8 @@ export function createApiRouter(): Router {
   // =========================================================================
   // ADMIN AUTHENTICATION ROUTES
   // =========================================================================
-  router.get('/admin/auth/status', (_req, res) => {
+  router.get('/admin/auth/status', async (_req, res) => {
+    await store.syncFromSupabase(true);
     const status = store.isAdminConfigured();
     res.json({
       ...status,
@@ -172,10 +175,13 @@ export function createApiRouter(): Router {
     const parsed = adminSetupSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
-        error: parsed.error.issues[0]?.message || 'Please enter a valid email and strong password (8+ chars).',
+        error:
+          parsed.error.issues[0]?.message ||
+          'Please enter a valid User ID, Email ID, and strong password (8+ chars).',
       });
     }
     const claimed = await store.claimInitialAdmin(
+      parsed.data.username,
       parsed.data.email,
       parsed.data.password,
       parsed.data.fullName
@@ -193,20 +199,22 @@ export function createApiRouter(): Router {
     });
   });
 
-  router.post('/admin/auth/login', rateLimit(15, 60_000), (req, res) => {
+  router.post('/admin/auth/login', rateLimit(15, 60_000), async (req, res) => {
+    await store.syncFromSupabase(true);
     const status = store.isAdminConfigured();
     if (!status.configured) {
       return res.status(403).json({
-        error: 'Admin account has not been claimed yet. Complete first-run setup first.',
+        error: 'Admin account has not been set up yet. Please create your User ID, Email & Password first.',
       });
     }
     const parsed = adminLoginSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: 'Please provide your credentials.' });
+      return res.status(400).json({ error: 'Please provide your User ID / Email and password.' });
     }
-    const valid = store.verifyAdminCredentials(parsed.data.email, parsed.data.password);
+    const identifier = (parsed.data.identifier || parsed.data.email || '').trim();
+    const valid = await store.verifyAdminCredentials(identifier, parsed.data.password);
     if (!valid) {
-      return res.status(401).json({ error: 'Invalid admin credentials.' });
+      return res.status(401).json({ error: 'Invalid User ID, Email, or Password.' });
     }
     const snapshot = store.getSnapshot();
     const token = createSessionToken(snapshot.adminProfile.email, snapshot.adminProfile.role);
@@ -221,7 +229,31 @@ export function createApiRouter(): Router {
   // =========================================================================
   router.use('/admin', requireAdminAuth);
 
-  router.post('/admin/auth/change-password', async (req: AdminRequest, res) => {
+  router.post('/admin/auth/update-credentials', rateLimit(10, 60_000), async (req: AdminRequest, res) => {
+    const parsed = adminUpdateCredentialsSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: parsed.error.issues[0]?.message || 'Please check your credential details.',
+      });
+    }
+    const result = await store.updateAdminCredentials({
+      currentPassword: parsed.data.currentPassword,
+      newUsername: parsed.data.newUsername,
+      newEmail: parsed.data.newEmail,
+      newPassword: parsed.data.newPassword || undefined,
+    });
+    if (!result.ok) {
+      return res.status(400).json({ error: result.error });
+    }
+    const token = createSessionToken(result.profile.email, result.profile.role);
+    return res.json({
+      ok: true,
+      token,
+      profile: result.profile,
+    });
+  });
+
+  router.post('/admin/auth/change-password', rateLimit(10, 60_000), async (req: AdminRequest, res) => {
     const currentPassword = String(req.body?.currentPassword || '');
     const newPassword = String(req.body?.newPassword || '');
     if (newPassword.length < 8) {
@@ -234,7 +266,8 @@ export function createApiRouter(): Router {
     return res.json({ ok: true });
   });
 
-  router.get('/admin/overview', (_req: AdminRequest, res) => {
+  router.get('/admin/overview', async (_req: AdminRequest, res) => {
+    await store.syncFromSupabase();
     const db = store.getSnapshot();
     const todayIst = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10);
 

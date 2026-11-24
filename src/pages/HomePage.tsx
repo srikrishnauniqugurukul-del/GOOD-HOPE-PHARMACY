@@ -10,6 +10,8 @@ import {
   ExternalLink,
   MapPin,
   Phone,
+  RefreshCw,
+  Search,
   ShieldCheck,
   Star,
   Stethoscope,
@@ -21,9 +23,10 @@ import { BookingWidget } from '../components/BookingWidget';
 import { GalleryGrid } from '../components/GalleryGrid';
 
 export const HomePage: React.FC = () => {
-  const { data, loading, t, language } = useSite();
+  const { data, loading, error, refreshSite, t, language } = useSite();
   const prefersReduced = useReducedMotion();
   const [selectedDeptFilter, setSelectedDeptFilter] = useState<string>('all');
+  const [doctorQuery, setDoctorQuery] = useState<string>('');
 
   const settings = data?.settings;
   const vis = settings?.visibility;
@@ -34,9 +37,18 @@ export const HomePage: React.FC = () => {
   const reviews = data?.reviews || [];
 
   const filteredDoctors = useMemo(() => {
-    if (selectedDeptFilter === 'all') return doctors;
-    return doctors.filter((d) => d.departmentId === selectedDeptFilter);
-  }, [doctors, selectedDeptFilter]);
+    const q = doctorQuery.trim().toLowerCase();
+    return doctors.filter((d) => {
+      if (selectedDeptFilter !== 'all' && d.departmentId !== selectedDeptFilter) return false;
+      if (!q) return true;
+      return (
+        d.name.toLowerCase().includes(q) ||
+        d.speciality.toLowerCase().includes(q) ||
+        d.qualifications.toLowerCase().includes(q) ||
+        d.boardDescription.toLowerCase().includes(q)
+      );
+    });
+  }, [doctors, selectedDeptFilter, doctorQuery]);
 
   const phone = settings?.phone || '+91 75859 76561';
   const plusCode = settings?.plusCodeAddress || '3FCC+MF, Kalimpong, West Bengal, India';
@@ -53,12 +65,31 @@ export const HomePage: React.FC = () => {
   if (loading && !data) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
-        <div className="h-[420px] rounded-2xl bg-[#F1F8F3] animate-pulse" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-44 rounded-2xl bg-[#F5F7F8] animate-pulse" />
+        <div className="h-[360px] rounded-2xl bg-[#F1F8F3] animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-56 rounded-2xl bg-[#F5F7F8] animate-pulse" />
           ))}
         </div>
+      </div>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <h1 className="font-display font-bold text-2xl text-[#172F43]">
+          Unable to load Good Hope Pharmacy data
+        </h1>
+        <p className="text-sm text-[#172F43]/70">{error}</p>
+        <button
+          type="button"
+          onClick={() => refreshSite()}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#37A879] hover:bg-[#28865E] text-white text-sm font-semibold cursor-pointer"
+        >
+          <RefreshCw className="w-4 h-4" />
+          <span>Retry Loading</span>
+        </button>
       </div>
     );
   }
@@ -147,30 +178,53 @@ export const HomePage: React.FC = () => {
 
       <div className="gh-section-divider" />
 
-      {/* DOCTORS AVAILABLE AT GOOD HOPE (Primary Homepage Feature) */}
-      {(vis?.showDoctorsSection ?? true) && doctors.length > 0 && (
-        <section className="py-14 lg:py-18 bg-[#F5F7F8]/65">
+      {/* DOCTORS AVAILABLE AT GOOD HOPE (Primary Homepage Feature — Always Clear & Prominent) */}
+      {(vis?.showDoctorsSection ?? true) && (
+        <section id="doctors-panel" className="py-14 lg:py-18 bg-[#F5F7F8]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
               <div className="max-w-2xl">
-                <div className="text-xs font-semibold text-[#37A879]">{t.sections.doctorsKicker}</div>
-                <h2 className="mt-2 font-display font-extrabold text-2xl sm:text-3xl text-[#172F43] tracking-tight">
-                  {t.sections.doctorsTitle}
+                <div className="text-xs font-semibold text-[#37A879] uppercase tracking-wider">
+                  {t.sections.doctorsKicker}
+                </div>
+                <h2 className="mt-1.5 font-display font-extrabold text-2xl sm:text-3xl text-[#172F43] tracking-tight">
+                  {t.sections.doctorsTitle} ({doctors.length})
                 </h2>
-                <p className="mt-2 text-sm text-[#172F43]/70 leading-relaxed">
+                <p className="mt-2 text-sm text-[#172F43]/75 leading-relaxed">
                   {t.sections.doctorsSubtitle}
                 </p>
               </div>
 
-              {/* Functional Department Filter Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white rounded-xl border border-[#172F43]/10">
+              <Link
+                to="/doctors"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#37A879] hover:text-[#28865E] whitespace-nowrap self-start lg:self-end"
+              >
+                <span>Open Full Doctors Directory</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Search + Department Filter Bar */}
+            <div className="mt-6 bg-white rounded-2xl border border-[#172F43]/10 p-3.5 flex flex-col lg:flex-row gap-3 lg:items-center justify-between shadow-2xs">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-[#172F43]/45 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="search"
+                  value={doctorQuery}
+                  onChange={(e) => setDoctorQuery(e.target.value)}
+                  placeholder="Search doctor name or speciality..."
+                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-[#172F43]/15 text-sm text-[#172F43] focus:outline-none focus:border-[#37A879]"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setSelectedDeptFilter('all')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     selectedDeptFilter === 'all'
                       ? 'bg-[#172F43] text-white'
-                      : 'text-[#172F43]/70 hover:text-[#172F43]'
+                      : 'bg-[#F5F7F8] text-[#172F43]/80 hover:bg-[#F1F8F3] hover:text-[#172F43]'
                   }`}
                 >
                   All ({doctors.length})
@@ -185,7 +239,7 @@ export const HomePage: React.FC = () => {
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                         selectedDeptFilter === dept.id
                           ? 'bg-[#37A879] text-white'
-                          : 'text-[#172F43]/70 hover:text-[#172F43]'
+                          : 'bg-[#F5F7F8] text-[#172F43]/80 hover:bg-[#F1F8F3] hover:text-[#172F43]'
                       }`}
                     >
                       {dept.name.split(' ')[0]}
@@ -194,83 +248,105 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {filteredDoctors.map((doc) => (
-                <article
-                  key={doc.id}
-                  className="group gh-animated-border p-5 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-start gap-3.5">
-                      <DoctorAvatar name={doc.name} photoUrl={doc.photoUrl} size="md" />
-                      <div className="min-w-0">
-                        <div className="text-xs font-semibold text-[#37A879] truncate">
-                          {doc.speciality}
+            {filteredDoctors.length === 0 ? (
+              <div className="mt-8 bg-white rounded-2xl border border-[#172F43]/10 p-10 text-center space-y-3">
+                <p className="text-sm text-[#172F43]/75">
+                  {doctors.length === 0
+                    ? 'No doctors are currently visible. Enable doctors from Admin Panel -> Doctors.'
+                    : 'No doctors match your current search or department filter.'}
+                </p>
+                {(selectedDeptFilter !== 'all' || doctorQuery) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedDeptFilter('all');
+                      setDoctorQuery('');
+                    }}
+                    className="px-4 py-2 rounded-xl bg-[#172F43] text-white text-xs font-semibold cursor-pointer"
+                  >
+                    Show All Doctors
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {filteredDoctors.map((doc) => (
+                  <article
+                    key={doc.id}
+                    className="group bg-white rounded-2xl border border-[#172F43]/12 hover:border-[#37A879] shadow-2xs hover:shadow-md transition-all p-5 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-start gap-3.5">
+                        <DoctorAvatar name={doc.name} photoUrl={doc.photoUrl} size="md" />
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold text-[#37A879] leading-snug">
+                            {doc.speciality}
+                          </div>
+                          <h3 className="font-display font-extrabold text-base text-[#172F43] mt-0.5 leading-snug">
+                            {doc.name}
+                          </h3>
+                          <div className="mt-1 text-[11px]">
+                            {doc.verificationStatus === 'verified' ? (
+                              <span className="text-[#28865E] font-semibold">
+                                {t.doctorCard.verified}
+                              </span>
+                            ) : (
+                              <span className="text-[#172F43]/60">{t.doctorCard.pendingVerification}</span>
+                            )}
+                          </div>
                         </div>
-                        <h3 className="font-display font-bold text-base text-[#172F43] mt-0.5 leading-snug">
-                          {doc.name}
-                        </h3>
-                        <div className="mt-1 text-[11px] text-[#172F43]/60">
-                          {doc.verificationStatus === 'verified' ? (
-                            <span className="text-[#28865E] font-medium">
-                              {t.doctorCard.verified}
-                            </span>
-                          ) : (
-                            <span>{t.doctorCard.pendingVerification}</span>
-                          )}
-                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-[#172F43]/8 space-y-1.5 text-xs text-[#172F43]/80">
+                        {doc.qualifications && (
+                          <p className="font-semibold text-[#172F43] leading-relaxed">
+                            {doc.qualifications}
+                          </p>
+                        )}
+                        {doc.boardDescription && (
+                          <p className="leading-relaxed text-[#172F43]/75">{doc.boardDescription}</p>
+                        )}
+                        {doc.registrationNumber && (
+                          <p className="font-mono-tabular text-[11px] font-medium text-[#172F43]/70">
+                            {t.doctorCard.regNo}: {doc.registrationNumber}
+                          </p>
+                        )}
+                        {doc.affiliation && (
+                          <p className="text-[11px] font-medium text-[#172F43]/70">
+                            {doc.affiliation}
+                          </p>
+                        )}
                       </div>
                     </div>
 
-                    <div className="mt-4 space-y-1.5 text-xs text-[#172F43]/75">
-                      {doc.qualifications && (
-                        <p className="font-medium text-[#172F43] leading-relaxed">
-                          {doc.qualifications}
-                        </p>
-                      )}
-                      {doc.boardDescription && (
-                        <p className="leading-relaxed line-clamp-2">{doc.boardDescription}</p>
-                      )}
-                      {doc.registrationNumber && (
-                        <p className="font-mono-tabular text-[11px] text-[#172F43]/65">
-                          {t.doctorCard.regNo}: {doc.registrationNumber}
-                        </p>
-                      )}
-                      {doc.affiliation && (
-                        <p className="text-[11px] text-[#172F43]/65">
-                          {doc.affiliation}
-                        </p>
-                      )}
+                    <div className="mt-5 pt-3.5 border-t border-[#172F43]/8 space-y-3">
+                      <div className="flex items-center gap-1.5 text-[11px] text-[#172F43]/70">
+                        <Clock className="w-3.5 h-3.5 text-[#37A879] shrink-0" />
+                        <span>
+                          {doc.scheduleConfigured
+                            ? t.doctorCard.scheduleAvailable
+                            : t.doctorCard.schedulePending}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Link
+                          to={`/doctors/${doc.slug}`}
+                          className="flex-1 text-center py-2 px-3 rounded-lg border border-[#172F43]/15 text-xs font-semibold text-[#172F43] hover:bg-[#F5F7F8] transition-colors whitespace-nowrap"
+                        >
+                          {t.doctorCard.viewProfile}
+                        </Link>
+                        <Link
+                          to={`/book?doctorId=${doc.id}`}
+                          className="flex-1 text-center py-2 px-3 rounded-lg bg-[#37A879] hover:bg-[#28865E] text-white text-xs font-semibold transition-colors whitespace-nowrap"
+                        >
+                          {t.doctorCard.bookWithDoctor}
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="mt-5 pt-4 border-t border-[#172F43]/8 space-y-3">
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#172F43]/65">
-                      <Clock className="w-3.5 h-3.5 text-[#37A879] shrink-0" />
-                      <span>
-                        {doc.scheduleConfigured
-                          ? t.doctorCard.scheduleAvailable
-                          : t.doctorCard.schedulePending}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Link
-                        to={`/doctors/${doc.slug}`}
-                        className="flex-1 text-center py-2 px-3 rounded-lg border border-[#172F43]/15 text-xs font-semibold text-[#172F43] hover:bg-[#F5F7F8] transition-colors whitespace-nowrap"
-                      >
-                        {t.doctorCard.viewProfile}
-                      </Link>
-                      <Link
-                        to={`/book?doctorId=${doc.id}`}
-                        className="flex-1 text-center py-2 px-3 rounded-lg bg-[#37A879] hover:bg-[#28865E] text-white text-xs font-semibold transition-colors whitespace-nowrap"
-                      >
-                        {t.doctorCard.bookWithDoctor}
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -296,6 +372,11 @@ export const HomePage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
+              {
+                to: '/doctors',
+                title: t.nav.doctors,
+                desc: `View all ${doctors.length} visiting specialist doctors, qualifications & profiles.`,
+              },
               {
                 to: '/book',
                 title: t.nav.book,
@@ -330,7 +411,7 @@ export const HomePage: React.FC = () => {
               <Link
                 key={card.to}
                 to={card.to}
-                className="group gh-animated-border p-5 flex items-center justify-between gap-4"
+                className="group bg-white rounded-2xl border border-[#172F43]/12 hover:border-[#37A879] p-5 flex items-center justify-between gap-4 transition-all hover:shadow-sm"
               >
                 <div>
                   <h3 className="font-display font-bold text-base text-[#172F43] group-hover:text-[#37A879] transition-colors">

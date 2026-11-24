@@ -1,16 +1,13 @@
 {
-  "adminAuth": {
-    "email": "srikrishna.uniqu.gurukul@gmail.com",
-    "passwordHash": "8d4c87c26d2cb7906002856cf74b79a4:7deeb82b1dfedfb452718042243196c9043b6910a96e06bd317352b5190fa637a1a29635ec0b926eaf2421c7d4a973f8a60e8ae78f4127cb8f0368bf0359f0be",
-    "claimedAt": "2026-11-24T19:58:53.060Z"
-  },
+  "adminAuth": null,
   "adminProfile": {
     "id": "admin-owner-1",
     "fullName": "admin",
-    "email": "srikrishna.uniqu.gurukul@gmail.com",
+    "email": "",
     "role": "Owner & Administrator",
     "phone": "+91 75859 76561",
-    "updatedAt": "2026-11-24T19:58:53.060Z"
+    "updatedAt": "2026-11-24T20:51:11.816Z",
+    "username": ""
   },
   "settings": {
     "businessName": "GOOD HOPE PHARMACY",
@@ -42,7 +39,7 @@
     "emailIntegrationStatus": "not_configured",
     "timezone": "Asia/Kolkata",
     "visibility": {
-      "showAnnouncementBar": true,
+      "showAnnouncementBar": false,
       "showHeroSection": true,
       "showHeroAnimation": true,
       "showAboutSection": false,
@@ -59,7 +56,7 @@
       "showVerifiedMapEmbed": false,
       "allowPublicBooking": true
     },
-    "updatedAt": "2026-11-24T20:00:51.817Z"
+    "updatedAt": "2026-11-24T20:50:39.955Z"
   },
   "departments": [
     {
@@ -153,7 +150,7 @@
       "registrationNumber": "WBMC-68227",
       "affiliation": "District Hospital, Kalimpong",
       "bio": "Listed on the Good Hope Pharmacy doctor board for ENT, Head-Neck Surgery, Vertigo, Ear Disorders, and Balance consultations.",
-      "photoUrl": null,
+      "photoUrl": "/api/uploads/ghp-1795553328538-625c35cbee62.jpg",
       "verificationStatus": "draft_unverified",
       "verificationNote": "Transcribed from clinic board. Verify qualifications, registration & timings in Admin.",
       "isVisible": true,
@@ -162,7 +159,7 @@
       "consultationFeeNote": "Confirm at counter",
       "displayOrder": 1,
       "createdAt": "2026-11-24T19:54:29.118Z",
-      "updatedAt": "2026-11-24T19:54:29.118Z"
+      "updatedAt": "2026-11-24T20:48:51.177Z"
     },
     {
       "id": "doc-sanjay-mazumder",
@@ -1241,11 +1238,11 @@
       "scheduleType": "pharmacy",
       "dayOfWeek": 0,
       "dayName": "Sunday",
-      "isOpen": false,
-      "openTime": "",
-      "closeTime": "",
-      "breakStart": "",
-      "breakEnd": "",
+      "isOpen": true,
+      "openTime": "03:17",
+      "closeTime": "02:18",
+      "breakStart": "02:18",
+      "breakEnd": "02:23",
       "note": "Pending owner confirmation"
     },
     {
@@ -1577,6 +1574,123 @@
   ],
   "contactEnquiries": [],
   "auditLogs": [
+    {
+      "id": "03990335-5d45-4d73-9ab6-d6490c064733",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:50:39.955Z"
+    },
+    {
+      "id": "482d0f77-59f6-4c19-9203-7f5bec0a9d5f",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:50:00.744Z"
+    },
+    {
+      "id": "676ec755-1c66-4c66-b608-f65bf040cd9c",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:59.977Z"
+    },
+    {
+      "id": "1f9feb32-bc46-47f9-8be3-d0149e0e6d5b",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:58.122Z"
+    },
+    {
+      "id": "accbdcda-906f-4c79-9ab0-718c2501fc54",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:27.939Z"
+    },
+    {
+      "id": "d0e6a137-f344-45f9-9491-f5b51c085d92",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:27.136Z"
+    },
+    {
+      "id": "7359c2d7-dd82-4632-a735-46777c50f0c3",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:26.560Z"
+    },
+    {
+      "id": "8946925f-ff38-4934-8363-b0a510b22794",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:23.979Z"
+    },
+    {
+      "id": "acbdd7f4-1915-4fd6-a7b2-d8f990dbaa0f",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:22.047Z"
+    },
+    {
+      "id": "965d442f-6b53-47fb-b091-2b459d06c3c6",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:19.544Z"
+    },
+    {
+      "id": "258b7a37-a089-4dc0-a81a-f85f83b19ebf",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_SETTINGS",
+      "entityType": "site_settings",
+      "entityId": "default",
+      "summary": "Updated website content, map/contact settings, or visibility toggles",
+      "createdAt": "2026-11-24T20:49:18.187Z"
+    },
+    {
+      "id": "9971d7f1-357d-402b-84f3-b9e99eca0dd3",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_DOCTOR",
+      "entityType": "doctors",
+      "entityId": "doc-dk-gupta",
+      "summary": "Updated Dr. D.K. Gupta",
+      "createdAt": "2026-11-24T20:48:51.177Z"
+    },
+    {
+      "id": "7b9cec72-bcb2-449d-a97a-ea550ac7edb6",
+      "actor": "srikrishna.uniqu.gurukul@gmail.com",
+      "action": "UPDATE_HOURS",
+      "entityType": "business_hours",
+      "entityId": "all",
+      "summary": "Updated pharmacy / consultation / booking hours",
+      "createdAt": "2026-11-24T20:47:36.117Z"
+    },
     {
       "id": "c641654b-26e1-4edc-97fc-028d59f9265f",
       "actor": "srikrishna.uniqu.gurukul@gmail.com",

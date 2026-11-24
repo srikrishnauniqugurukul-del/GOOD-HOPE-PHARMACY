@@ -28,9 +28,11 @@ const STORE_PATH = path.resolve(DATA_DIR, 'goodhope-store.json');
 export const UPLOADS_DIR = path.resolve(DATA_DIR, 'uploads');
 
 export interface AdminAuthRecord {
+  username: string;
   email: string;
   passwordHash: string; // scrypt salt:derivedKey
   claimedAt: string;
+  updatedAt?: string;
 }
 
 export interface PersistedDatabase {
@@ -695,7 +697,8 @@ function createInitialDatabase(): PersistedDatabase {
     adminProfile: {
       id: 'admin-owner-1',
       fullName: 'Sudarshan Karkee',
-      email: 'admin@goodhopepharmacy.in',
+      username: '',
+      email: '',
       role: 'Owner & Administrator',
       phone: '+91 75859 76561',
       updatedAt: ts,
@@ -730,7 +733,10 @@ function createInitialDatabase(): PersistedDatabase {
 class GoodHopeStore {
   private db: PersistedDatabase;
   private supabase: SupabaseClient | null = null;
+  private supabaseReady = false;
+  private supabaseSyncWarned = false;
   private writeQueue: Promise<void> = Promise.resolve();
+  private lastRemotePullAt = 0;
 
   constructor() {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -743,10 +749,84 @@ class GoodHopeStore {
     }
 
     this.db = this.loadFromDisk();
+    if (this.supabase) {
+      void this.syncFromSupabase(true);
+    }
   }
 
   public getStorageBackendMode(): 'supabase' | 'local_server_db' {
-    return this.supabase ? 'supabase' : 'local_server_db';
+    return this.supabase && this.supabaseReady ? 'supabase' : 'local_server_db';
+  }
+
+  public async syncFromSupabase(force = false): Promise<void> {
+    if (!this.supabase) return;
+    const now = Date.now();
+    if (!force && now - this.lastRemotePullAt < 3000) return;
+    this.lastRemotePullAt = now;
+
+    try {
+      const { data, error } = await this.supabase
+        .from('app_shared_state')
+        .select('payload')
+        .eq('state_key', 'good_hope_primary')
+        .maybeSingle();
+
+      if (error) {
+        if (!this.supabaseSyncWarned) {
+          this.supabaseSyncWarned = true;
+          console.warn('Supabase app_shared_state sync skipped (run 001_initial_schema.sql):', error.message);
+        }
+        return;
+      }
+
+      this.supabaseReady = true;
+      if (data?.payload && typeof data.payload === 'object') {
+        const remote = data.payload as PersistedDatabase;
+        if (remote.settings && Array.isArray(remote.doctors)) {
+          this.db = this.normalizeDb(remote);
+          this.saveSync(this.db);
+        }
+      } else {
+        // First push of local state into Supabase
+        await this.pushToSupabase(this.db);
+      }
+    } catch (err) {
+      if (!this.supabaseSyncWarned) {
+        this.supabaseSyncWarned = true;
+        console.warn('Supabase sync unavailable, using local server store:', err);
+      }
+    }
+  }
+
+  private async pushToSupabase(data: PersistedDatabase): Promise<void> {
+    if (!this.supabase) return;
+    try {
+      const { error } = await this.supabase
+        .from('app_shared_state')
+        .upsert(
+          {
+            state_key: 'good_hope_primary',
+            payload: data,
+            updated_at: nowIso(),
+          },
+          { onConflict: 'state_key' }
+        );
+      if (!error) {
+        this.supabaseReady = true;
+      }
+    } catch {
+      // Keep local server store authoritative if remote sync is transiently unavailable
+    }
+  }
+
+  private normalizeDb(parsed: PersistedDatabase): PersistedDatabase {
+    if (parsed.adminProfile && typeof parsed.adminProfile.username !== 'string') {
+      parsed.adminProfile.username = parsed.adminAuth?.username || '';
+    }
+    if (parsed.adminAuth && typeof parsed.adminAuth.username !== 'string') {
+      parsed.adminAuth.username = parsed.adminAuth.email.split('@')[0] || 'admin';
+    }
+    return parsed;
   }
 
   private loadFromDisk(): PersistedDatabase {
@@ -755,7 +835,7 @@ class GoodHopeStore {
         const raw = fs.readFileSync(STORE_PATH, 'utf-8');
         const parsed = JSON.parse(raw) as PersistedDatabase;
         if (parsed && parsed.settings && Array.isArray(parsed.doctors)) {
-          return parsed;
+          return this.normalizeDb(parsed);
         }
       }
     } catch (err) {
@@ -775,6 +855,7 @@ class GoodHopeStore {
   private async persist(): Promise<void> {
     this.writeQueue = this.writeQueue.then(async () => {
       this.saveSync(this.db);
+      await this.pushToSupabase(this.db);
     });
     await this.writeQueue;
   }
@@ -844,28 +925,47 @@ class GoodHopeStore {
     return { configured: false, mode: 'needs_setup' };
   }
 
-  public async claimInitialAdmin(email: string, password: string, fullName?: string): Promise<boolean> {
+  public async claimInitialAdmin(
+    username: string,
+    email: string,
+    password: string,
+    fullName?: string
+  ): Promise<boolean> {
+    await this.syncFromSupabase(true);
     const status = this.isAdminConfigured();
     if (status.configured) {
       return false;
     }
+    const cleanUsername = username.trim().toLowerCase();
+    const cleanEmail = email.trim().toLowerCase();
+    const ts = nowIso();
     this.db.adminAuth = {
-      email: email.trim().toLowerCase(),
+      username: cleanUsername,
+      email: cleanEmail,
       passwordHash: GoodHopeStore.hashPassword(password),
-      claimedAt: nowIso(),
+      claimedAt: ts,
+      updatedAt: ts,
     };
     this.db.adminProfile = {
       ...this.db.adminProfile,
-      email: email.trim().toLowerCase(),
+      username: cleanUsername,
+      email: cleanEmail,
       fullName: fullName?.trim() || this.db.adminProfile.fullName,
-      updatedAt: nowIso(),
+      updatedAt: ts,
     };
-    this.addAudit('Admin Setup', 'CLAIM_ADMIN', 'admin_users', 'primary', `Initial admin account claimed by ${email}`);
+    this.addAudit(
+      cleanEmail,
+      'CLAIM_ADMIN',
+      'admin_users',
+      'primary',
+      `Admin account created (User ID: ${cleanUsername}, Email: ${cleanEmail})`
+    );
     await this.persist();
     return true;
   }
 
-  public verifyAdminCredentials(email: string, password: string): boolean {
+  public async verifyAdminCredentials(identifier: string, password: string): Promise<boolean> {
+    await this.syncFromSupabase(true);
     const envPass = (process.env.ADMIN_PASSCODE || '').trim();
     if (envPass.length > 0) {
       const a = Buffer.from(password);
@@ -874,29 +974,89 @@ class GoodHopeStore {
       return crypto.timingSafeEqual(a, b);
     }
     if (!this.db.adminAuth) return false;
-    const emailMatches =
-      email.trim().toLowerCase() === this.db.adminAuth.email.trim().toLowerCase();
-    if (!emailMatches) return false;
+    const cleanId = identifier.trim().toLowerCase();
+    if (!cleanId) return false;
+    const emailMatches = cleanId === this.db.adminAuth.email.trim().toLowerCase();
+    const usernameMatches =
+      Boolean(this.db.adminAuth.username) &&
+      cleanId === this.db.adminAuth.username.trim().toLowerCase();
+    if (!emailMatches && !usernameMatches) return false;
     return GoodHopeStore.verifyPassword(password, this.db.adminAuth.passwordHash);
   }
 
-  public async changeAdminPassword(currentPassword: string, newPassword: string): Promise<{ ok: boolean; error?: string }> {
+  public async updateAdminCredentials(input: {
+    currentPassword: string;
+    newUsername?: string;
+    newEmail?: string;
+    newPassword?: string;
+  }): Promise<{ ok: true; profile: AdminProfile } | { ok: false; error: string }> {
+    await this.syncFromSupabase(true);
     const envPass = (process.env.ADMIN_PASSCODE || '').trim();
     if (envPass.length > 0) {
       return {
         ok: false,
-        error: 'Admin passcode is currently controlled by the ADMIN_PASSCODE environment secret. Update it in Secrets settings.',
+        error:
+          'Admin passcode is currently controlled by the ADMIN_PASSCODE environment secret. Clear ADMIN_PASSCODE in Secrets to manage User ID, Email & Password directly from the website.',
       };
     }
     if (!this.db.adminAuth) {
       return { ok: false, error: 'Admin account not initialized.' };
     }
-    if (!GoodHopeStore.verifyPassword(currentPassword, this.db.adminAuth.passwordHash)) {
+    if (!GoodHopeStore.verifyPassword(input.currentPassword, this.db.adminAuth.passwordHash)) {
       return { ok: false, error: 'Current password is incorrect.' };
     }
-    this.db.adminAuth.passwordHash = GoodHopeStore.hashPassword(newPassword);
-    this.addAudit(this.db.adminProfile.email, 'UPDATE_PASSWORD', 'admin_users', 'primary', 'Admin password changed');
+
+    const ts = nowIso();
+    const changes: string[] = [];
+
+    if (input.newUsername && input.newUsername.trim()) {
+      const cleanUsername = input.newUsername.trim().toLowerCase();
+      if (cleanUsername !== this.db.adminAuth.username) {
+        this.db.adminAuth.username = cleanUsername;
+        this.db.adminProfile.username = cleanUsername;
+        changes.push(`User ID -> ${cleanUsername}`);
+      }
+    }
+
+    if (input.newEmail && input.newEmail.trim()) {
+      const cleanEmail = input.newEmail.trim().toLowerCase();
+      if (cleanEmail !== this.db.adminAuth.email) {
+        this.db.adminAuth.email = cleanEmail;
+        this.db.adminProfile.email = cleanEmail;
+        changes.push(`Email -> ${cleanEmail}`);
+      }
+    }
+
+    if (input.newPassword && input.newPassword.length >= 8) {
+      this.db.adminAuth.passwordHash = GoodHopeStore.hashPassword(input.newPassword);
+      changes.push('Password updated');
+    }
+
+    if (changes.length === 0) {
+      return { ok: false, error: 'No changes detected. Update User ID, Email, or New Password.' };
+    }
+
+    this.db.adminAuth.updatedAt = ts;
+    this.db.adminProfile.updatedAt = ts;
+    this.addAudit(
+      this.db.adminProfile.email || this.db.adminProfile.username,
+      'UPDATE_CREDENTIALS',
+      'admin_users',
+      'primary',
+      changes.join(' · ')
+    );
     await this.persist();
+    return { ok: true, profile: this.db.adminProfile };
+  }
+
+  public async changeAdminPassword(currentPassword: string, newPassword: string): Promise<{ ok: boolean; error?: string }> {
+    const result = await this.updateAdminCredentials({
+      currentPassword,
+      newPassword,
+    });
+    if (!result.ok) {
+      return { ok: false, error: result.error };
+    }
     return { ok: true };
   }
 

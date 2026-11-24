@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Globe, Menu, Phone, X } from 'lucide-react';
+import { Globe, Menu, Phone, Stethoscope, X } from 'lucide-react';
 import { useSite } from '../hooks/useSiteContext';
 import { LANGUAGES } from '../lib/i18n';
 import { GoodHopeLogo } from './GoodHopeLogo';
@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
           {/* Zone 2: Clean single-line navigation links */}
           <nav
             aria-label="Main Navigation"
-            className="hidden xl:flex items-center gap-6 text-sm font-medium text-[#172F43]/80"
+            className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium text-[#172F43]/80"
           >
             {navItems.map((item) => {
               const active = location.pathname === item.to;
@@ -140,7 +140,7 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => setMobileOpen((o) => !o)}
               aria-label="Toggle Menu"
-              className="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-[#172F43]/12 text-[#172F43] hover:bg-[#F5F7F8] cursor-pointer"
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-[#172F43]/12 text-[#172F43] hover:bg-[#F5F7F8] cursor-pointer"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -149,7 +149,7 @@ export const Header: React.FC = () => {
 
         {/* Mobile Drawer */}
         {mobileOpen && (
-          <div className="xl:hidden bg-white border-t border-[#172F43]/10 px-4 pt-3 pb-5 shadow-lg">
+          <div className="lg:hidden bg-white border-t border-[#172F43]/10 px-4 pt-3 pb-5 shadow-lg">
             <nav className="flex flex-col space-y-1">
               {navItems.map((item) => {
                 const active = location.pathname === item.to;
@@ -187,16 +187,23 @@ export const Header: React.FC = () => {
 
       {/* Compact Mobile Bottom Action Bar (strictly < 8% of mobile viewport) */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#172F43]/12 px-3 py-2 flex items-center gap-2">
+        <Link
+          to="/doctors"
+          className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl bg-[#F5F7F8] text-[#172F43] text-xs font-semibold border border-[#172F43]/12 whitespace-nowrap"
+        >
+          <Stethoscope className="w-3.5 h-3.5 text-[#37A879]" />
+          <span>{t.nav.doctors}</span>
+        </Link>
         <a
           href={telHref}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#F1F8F3] text-[#172F43] text-xs font-semibold border border-[#37A879]/25 whitespace-nowrap"
+          className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-2.5 rounded-xl bg-[#F1F8F3] text-[#172F43] text-xs font-semibold border border-[#37A879]/25 whitespace-nowrap"
         >
           <Phone className="w-3.5 h-3.5 text-[#37A879]" />
           <span>{t.contact.callNow}</span>
         </a>
         <Link
           to="/book"
-          className="flex-[1.35] inline-flex items-center justify-center py-2.5 px-3 rounded-xl bg-[#37A879] text-white text-xs font-semibold whitespace-nowrap"
+          className="flex-[1.2] inline-flex items-center justify-center py-2.5 px-3 rounded-xl bg-[#37A879] text-white text-xs font-semibold whitespace-nowrap"
         >
           {t.nav.book}
         </Link>

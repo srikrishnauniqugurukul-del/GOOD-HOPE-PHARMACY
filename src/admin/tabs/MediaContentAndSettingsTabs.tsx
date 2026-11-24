@@ -20,6 +20,7 @@ import {
 import type { GalleryCategory, GalleryItem, ReviewItem, SectionVisibility, SiteSettings } from '../../types/domain';
 import { adminFetch, uploadAdminImage } from '../../lib/api';
 import { GoodHopeLogo } from '../../components/GoodHopeLogo';
+import { useSite } from '../../hooks/useSiteContext';
 import type { AdminTabProps } from '../types';
 
 // ============================================================================
@@ -1006,12 +1007,23 @@ export const AdminProfileTab: React.FC<AdminTabProps> = ({
         />
       </div>
       <div>
-        <label className="block font-semibold text-[#172F43] mb-1">Admin Email</label>
+        <label className="block font-semibold text-[#172F43] mb-1">User ID (Username)</label>
         <input
           disabled
-          value={overview.adminProfile.email}
+          value={overview.adminProfile.username || 'Not set'}
+          className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15 bg-[#F5F7F8] font-mono-tabular"
+        />
+      </div>
+      <div>
+        <label className="block font-semibold text-[#172F43] mb-1">Admin Email ID</label>
+        <input
+          disabled
+          value={overview.adminProfile.email || 'Not set'}
           className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15 bg-[#F5F7F8]"
         />
+        <p className="mt-1 text-[11px] text-[#172F43]/60">
+          To change your User ID, Email ID, or Password, open the Security & Audit Logs tab.
+        </p>
       </div>
       <div>
         <label className="block font-semibold text-[#172F43] mb-1">Role</label>
@@ -1043,22 +1055,44 @@ export const AdminProfileTab: React.FC<AdminTabProps> = ({
 // 17. SECURITY SETTINGS & AUDIT LOGS TAB
 // ============================================================================
 export const SecurityTab: React.FC<AdminTabProps> = ({ overview, token, onRefresh, notify }) => {
+  const { setAdminSession } = useSite();
+  const [newUsername, setNewUsername] = useState(overview.adminProfile.username || '');
+  const [newEmail, setNewEmail] = useState(overview.adminProfile.email || '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const handleChangePassword = async (e: React.FormEvent) => {
+  useEffect(() => {
+    setNewUsername(overview.adminProfile.username || '');
+    setNewEmail(overview.adminProfile.email || '');
+  }, [overview.adminProfile.username, overview.adminProfile.email]);
+
+  const handleUpdateCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
     try {
-      await adminFetch('/api/admin/auth/change-password', token, {
-        method: 'POST',
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
+      const res = await adminFetch<{ ok: boolean; token: string; profile: typeof overview.adminProfile }>(
+        '/api/admin/auth/update-credentials',
+        token,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            currentPassword,
+            newUsername: newUsername.trim(),
+            newEmail: newEmail.trim(),
+            newPassword: newPassword || '',
+          }),
+        }
+      );
+      setAdminSession(res.token, res.profile);
       setCurrentPassword('');
       setNewPassword('');
-      notify('Admin password updated securely.');
+      notify('Admin User ID, Email & Password updated and synced across sessions.');
       await onRefresh();
     } catch (err) {
-      notify(err instanceof Error ? err.message : 'Password update failed.', true);
+      notify(err instanceof Error ? err.message : 'Credential update failed.', true);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -1068,20 +1102,24 @@ export const SecurityTab: React.FC<AdminTabProps> = ({ overview, token, onRefres
         <div className="bg-white rounded-xl border border-[#172F43]/10 p-5 space-y-3">
           <div className="flex items-center gap-2 font-display font-bold text-sm text-[#172F43]">
             <Database className="w-4 h-4 text-[#37A879]" />
-            <span>Database & Security Architecture</span>
+            <span>Database & Cross-Site Login Sync</span>
           </div>
           <p className="text-[#172F43]/75 leading-relaxed">
             Active Storage:{' '}
             <strong className="text-[#172F43]">
               {overview.storageBackend === 'supabase'
-                ? 'Supabase PostgreSQL (Connected)'
-                : 'Server Persistent Store (Ready for Supabase PostgreSQL when SUPABASE_URL & SUPABASE_SECRET_KEY are set)'}
+                ? 'Supabase PostgreSQL (Live Cross-Site Sync Active)'
+                : 'Server Persistent Store (Set SUPABASE_URL & SUPABASE_SECRET_KEY in Secrets to sync AI Studio + Shared/Live Website automatically)'}
             </strong>
           </p>
           <ul className="space-y-1.5 text-[#172F43]/70">
             <li className="flex items-center gap-1.5">
               <Check className="w-3.5 h-3.5 text-[#37A879]" />
-              <span>Public admin registration disabled</span>
+              <span>Login supports both User ID and Email ID with salted scrypt password hashing</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <Check className="w-3.5 h-3.5 text-[#37A879]" />
+              <span>Updating credentials here updates the shared server/Supabase store immediately</span>
             </li>
             <li className="flex items-center gap-1.5">
               <Check className="w-3.5 h-3.5 text-[#37A879]" />
@@ -1091,47 +1129,71 @@ export const SecurityTab: React.FC<AdminTabProps> = ({ overview, token, onRefres
               <Check className="w-3.5 h-3.5 text-[#37A879]" />
               <span>Atomic server-side double-booking prevention active</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <Check className="w-3.5 h-3.5 text-[#37A879]" />
-              <span>Supabase SQL migrations & RLS policies prepared in supabase/migrations/</span>
-            </li>
           </ul>
         </div>
 
         <form
-          onSubmit={handleChangePassword}
+          onSubmit={handleUpdateCredentials}
           className="bg-white rounded-xl border border-[#172F43]/10 p-5 space-y-3"
         >
           <div className="flex items-center gap-2 font-display font-bold text-sm text-[#172F43]">
             <KeyRound className="w-4 h-4 text-[#37A879]" />
-            <span>Change Admin Password</span>
+            <span>Change User ID, Email ID & Password</span>
           </div>
           <div>
-            <label className="block font-semibold text-[#172F43] mb-1">Current Password</label>
+            <label className="block font-semibold text-[#172F43] mb-1">Admin User ID (Username)</label>
+            <input
+              type="text"
+              required
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              placeholder="e.g. sudarshan_admin"
+              className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15 font-mono-tabular"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold text-[#172F43] mb-1">Admin Email ID</label>
+            <input
+              type="email"
+              required
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="yourname@gmail.com"
+              className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold text-[#172F43] mb-1">
+              Current Password (required to confirm changes)
+            </label>
             <input
               type="password"
               required
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Enter current password"
               className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15"
             />
           </div>
           <div>
-            <label className="block font-semibold text-[#172F43] mb-1">New Password (min 8 chars)</label>
+            <label className="block font-semibold text-[#172F43] mb-1">
+              New Password (optional — leave blank to keep current)
+            </label>
             <input
               type="password"
-              required
               minLength={8}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Min 8 characters"
               className="w-full px-3 py-2 rounded-lg border border-[#172F43]/15"
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-[#172F43] text-white font-semibold cursor-pointer"
+            disabled={saving}
+            className="px-4 py-2 rounded-lg bg-[#172F43] hover:bg-[#1e3d57] text-white font-semibold cursor-pointer disabled:opacity-60"
           >
-            Update Password
+            {saving ? 'Updating...' : 'Save Updated Login Credentials'}
           </button>
         </form>
       </div>

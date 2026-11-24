@@ -210,6 +210,7 @@ export interface AuditLog {
 export interface AdminProfile {
   id: string;
   fullName: string;
+  username: string;
   email: string;
   role: string;
   phone: string;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface DoctorAvatarProps {
   name: string;
@@ -20,6 +20,10 @@ function getInitials(name: string): string {
  */
 export const DoctorAvatar: React.FC<DoctorAvatarProps> = ({ name, photoUrl, size = 'md' }) => {
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [photoUrl]);
 
   const dims =
     size === 'lg'

@@ -427,3 +427,14 @@ BEGIN
   RETURN QUERY SELECT v_ref, v_appt_id, 'pending'::TEXT;
 END;
 $$;
+
+-- 17. SHARED SERVER STATE (Service-role only — syncs admin credentials & site config across environments)
+CREATE TABLE IF NOT EXISTS public.app_shared_state (
+  state_key TEXT PRIMARY KEY,
+  payload JSONB NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.app_shared_state ENABLE ROW LEVEL SECURITY;
+-- No anon or authenticated client policies: strictly accessible via server-side SUPABASE_SECRET_KEY.
+
