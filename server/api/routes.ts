@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import express, { type Router } from 'express';
 import multer from 'multer';
-import { store, UPLOADS_DIR } from '../services/store.ts';
+import { BUNDLED_UPLOADS_DIR, store, UPLOADS_DIR } from '../services/store.ts';
 import {
   createSessionToken,
   rateLimit,
@@ -73,15 +73,26 @@ export function createApiRouter(): Router {
     if (!rawName || !/^[a-zA-Z0-9._-]+$/.test(rawName)) {
       return res.status(400).json({ error: 'Invalid filename' });
     }
-    const resolved = path.resolve(UPLOADS_DIR, rawName);
-    if (!resolved.startsWith(UPLOADS_DIR + path.sep)) {
-      return res.status(403).json({ error: 'Access denied' });
+    const searchDirs =
+      UPLOADS_DIR === BUNDLED_UPLOADS_DIR ? [UPLOADS_DIR] : [UPLOADS_DIR, BUNDLED_UPLOADS_DIR];
+
+    let foundPath: string | null = null;
+    for (const dir of searchDirs) {
+      const resolved = path.resolve(dir, rawName);
+      if (!resolved.startsWith(dir + path.sep)) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+      if (fs.existsSync(resolved)) {
+        foundPath = resolved;
+        break;
+      }
     }
-    if (!fs.existsSync(resolved)) {
+
+    if (!foundPath) {
       return res.status(404).json({ error: 'Image not found' });
     }
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.sendFile(resolved);
+    return res.sendFile(foundPath);
   });
 
   // =========================================================================

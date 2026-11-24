@@ -23,7 +23,14 @@ import type {
   SiteSettings,
 } from '../../src/types/domain.ts';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const IS_SERVERLESS = Boolean(
+  process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.VERCEL
+);
+const BUNDLED_DATA_DIR = path.resolve(process.cwd(), 'data');
+const BUNDLED_STORE_PATH = path.resolve(BUNDLED_DATA_DIR, 'goodhope-store.json');
+export const BUNDLED_UPLOADS_DIR = path.resolve(BUNDLED_DATA_DIR, 'uploads');
+
+const DATA_DIR = IS_SERVERLESS ? path.resolve('/tmp', 'good-hope-data') : BUNDLED_DATA_DIR;
 const STORE_PATH = path.resolve(DATA_DIR, 'goodhope-store.json');
 export const UPLOADS_DIR = path.resolve(DATA_DIR, 'uploads');
 
@@ -739,8 +746,12 @@ class GoodHopeStore {
   private lastRemotePullAt = 0;
 
   constructor() {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    try {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    } catch (err) {
+      console.warn('Unable to initialize local data directory:', err);
+    }
 
     if (process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY) {
       this.supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY, {
@@ -830,26 +841,37 @@ class GoodHopeStore {
   }
 
   private loadFromDisk(): PersistedDatabase {
-    try {
-      if (fs.existsSync(STORE_PATH)) {
-        const raw = fs.readFileSync(STORE_PATH, 'utf-8');
-        const parsed = JSON.parse(raw) as PersistedDatabase;
-        if (parsed && parsed.settings && Array.isArray(parsed.doctors)) {
-          return this.normalizeDb(parsed);
+    const candidatePaths =
+      STORE_PATH === BUNDLED_STORE_PATH ? [STORE_PATH] : [STORE_PATH, BUNDLED_STORE_PATH];
+
+    for (const filePath of candidatePaths) {
+      try {
+        if (fs.existsSync(filePath)) {
+          const raw = fs.readFileSync(filePath, 'utf-8');
+          const parsed = JSON.parse(raw) as PersistedDatabase;
+          if (parsed && parsed.settings && Array.isArray(parsed.doctors)) {
+            return this.normalizeDb(parsed);
+          }
         }
+      } catch (err) {
+        console.error(`Failed to read store from ${filePath}:`, err);
       }
-    } catch (err) {
-      console.error('Failed to read local store, creating fresh initial store:', err);
     }
+
     const fresh = createInitialDatabase();
     this.saveSync(fresh);
     return fresh;
   }
 
   private saveSync(data: PersistedDatabase): void {
-    const tmpPath = `${STORE_PATH}.${crypto.randomBytes(4).toString('hex')}.tmp`;
-    fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
-    fs.renameSync(tmpPath, STORE_PATH);
+    try {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+      const tmpPath = `${STORE_PATH}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+      fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
+      fs.renameSync(tmpPath, STORE_PATH);
+    } catch (err) {
+      console.warn('Local disk save skipped (using in-memory / Supabase state):', err);
+    }
   }
 
   private async persist(): Promise<void> {

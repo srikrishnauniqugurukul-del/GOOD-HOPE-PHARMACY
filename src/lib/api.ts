@@ -1,6 +1,19 @@
 import type { PublicSitePayload } from '../types/domain';
+import { DEFAULT_PUBLIC_SITE_PAYLOAD } from './defaultPublicData';
+
+function isJsonResponse(res: Response): boolean {
+  const contentType = res.headers.get('content-type') || '';
+  return contentType.toLowerCase().includes('application/json');
+}
 
 async function parseJsonOrThrow<T>(res: Response): Promise<T> {
+  if (!isJsonResponse(res)) {
+    throw new Error(
+      res.status === 404
+        ? 'Backend API route not found (404). Deploy full repository with Netlify Functions enabled.'
+        : `Unexpected server response (${res.status}).`
+    );
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     throw new Error((data as { error?: string }).error || `Request failed (${res.status})`);
@@ -9,8 +22,27 @@ async function parseJsonOrThrow<T>(res: Response): Promise<T> {
 }
 
 export async function fetchPublicSite(): Promise<PublicSitePayload> {
-  const res = await fetch('/api/public/site', { cache: 'no-store' });
-  return parseJsonOrThrow<PublicSitePayload>(res);
+  try {
+    const res = await fetch('/api/public/site', { cache: 'no-store' });
+    if (res.ok && isJsonResponse(res)) {
+      const payload = (await res.json()) as PublicSitePayload;
+      if (payload && payload.settings && Array.isArray(payload.doctors)) {
+        return payload;
+      }
+    }
+    // Graceful static fallback if site is deployed as a pure static dist/ folder without Netlify Functions
+    if (res.status === 404 || !isJsonResponse(res)) {
+      return DEFAULT_PUBLIC_SITE_PAYLOAD;
+    }
+    const errData = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(errData.error || `Request failed (${res.status})`);
+  } catch (err) {
+    // If API endpoint is unreachable on a static-only host, serve the public directory cleanly
+    if (err instanceof TypeError) {
+      return DEFAULT_PUBLIC_SITE_PAYLOAD;
+    }
+    throw err;
+  }
 }
 
 export interface SlotAvailabilityResponse {
@@ -30,6 +62,18 @@ export async function fetchDoctorSlots(
 ): Promise<SlotAvailabilityResponse> {
   const params = new URLSearchParams({ doctorId, date });
   const res = await fetch(`/api/public/slots?${params.toString()}`, { cache: 'no-store' });
+  if (res.status === 404 || !isJsonResponse(res)) {
+    return {
+      date,
+      doctorId,
+      isBlocked: false,
+      blockedReason: null,
+      scheduleConfigured: false,
+      temporarilyUnavailable: false,
+      unavailableReason: '',
+      slots: [],
+    };
+  }
   return parseJsonOrThrow<SlotAvailabilityResponse>(res);
 }
 
