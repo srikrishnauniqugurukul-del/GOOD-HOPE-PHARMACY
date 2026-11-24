@@ -1,0 +1,1166 @@
+# MASTER PROJECT PROMPT
+# GOOD HOPE PHARMACY – PREMIUM HEALTHCARE WEBSITE
+## Google AI Studio + React + TypeScript + Supabase Full-Stack Application
+
+Act as a world-class UI/UX designer, senior full-stack developer, healthcare website specialist, animation designer, database architect and application security engineer.
+
+Build a complete, premium, production-quality, fully functional healthcare website for GOOD HOPE PHARMACY, Kalimpong.
+
+IMPORTANT: This is a NEW and SEPARATE CLIENT PROJECT. Never reuse any company information, doctors, phone numbers, photographs, colours, addresses or branding from New Life Medical Store or any previous client.
+
+The two uploaded reference photographs are the primary visual references for this project.
+
+--------------------------------------------------
+1. CLIENT BUSINESS INFORMATION
+--------------------------------------------------
+
+Business Name: GOOD HOPE
+Business Type: PHARMACY
+
+Full Business Name: GOOD HOPE PHARMACY
+
+Business Owner: Sudarshan Karkee
+Client-provided spelling: Karkee
+Phone: +91 75859 76561
+
+Location:
+3FCC+MF, Kalimpong, West Bengal, India.
+
+Additional address reference:
+KD Pradhan Road, Kalimpong Bazar, Kalimpong, West Bengal 734301.
+
+Email: Not currently provided.
+
+Facebook:
+https://www.facebook.com/sudarshan.karkee/about
+
+Existing Website: Not provided.
+
+Important address instructions:
+- Use the supplied plus code as the initial public address.
+- Create an editable Google Maps URL field in admin settings.
+- Do not reuse any Google Maps URL belonging to New Life Medical Store.
+- The previously supplied clickable search link is not a verified Good Hope location.
+- Do not publish directions until the correct Good Hope location pin has been verified.
+- Keep the Facebook link configurable and display it only after owner approval.
+
+Business identity:
+A professional pharmacy with doctor consultation and appointment enquiry facilities.
+
+The website must communicate trust, accessibility, professional healthcare and a welcoming patient experience.
+
+--------------------------------------------------
+2. BRAND IDENTITY – FOLLOW THE UPLOADED LOGO
+--------------------------------------------------
+
+The uploaded GOOD HOPE circular signboard is the main brand reference.
+
+Create the entire website around these colours:
+
+GOOD HOPE GREEN: #37A879
+HOPE NAVY: #172F43
+MEDICAL RED: #D83B48
+LEAF GREEN: #B9D36A
+PURE WHITE: #FFFFFF
+LIGHT GREEN BACKGROUND: #F1F8F3
+SOFT GREY: #F5F7F8
+
+Use the red medical cross, green GOOD lettering and dark navy HOPE lettering as the visual identity.
+
+Do not introduce the previous client's green-red-only branding.
+
+Logo instructions:
+- Reuse the uploaded circular GOOD HOPE logo.
+- If the photograph is not sufficiently clear, recreate a clean vector version based on the supplied reference.
+- Keep the words GOOD HOPE readable.
+- Maintain the original medical-cross concept.
+- Provide transparent PNG and SVG logo assets.
+- Make the logo editable through the admin settings.
+
+Design style:
+- Premium healthcare website.
+- Modern medical aesthetic.
+- Clean, spacious layouts.
+- Elegant rounded cards.
+- Professional typography.
+- Beautiful icons.
+- Smooth animations.
+- Light shadows.
+- Premium gradients.
+- Consistent colour hierarchy.
+
+Typography:
+- English: Manrope, Inter or DM Sans.
+- Bengali: Hind Siliguri.
+- Nepali: Noto Sans Devanagari.
+
+Use premium font weights and carefully designed heading sizes.
+
+The website must look like a professional agency-built client project.
+
+--------------------------------------------------
+3. ADVANCED ANIMATED HOMEPAGE
+--------------------------------------------------
+
+Create an impressive animated homepage.
+
+Hero headline:
+
+"GOOD HEALTH. GOOD CARE. GOOD HOPE."
+
+Subheading:
+
+"Your trusted healthcare destination in Kalimpong."
+
+Supporting text:
+
+"Discover convenient pharmacy services and doctor consultation appointments at Good Hope Pharmacy."
+
+Primary CTA:
+BOOK AN APPOINTMENT
+
+Secondary CTA:
+MEET OUR DOCTORS
+
+Hero animation concept:
+
+Create an elegant, high-quality 3D healthcare animation.
+
+Scene 1:
+A friendly illustrated doctor wearing a white coat and stethoscope examines a seated patient in a modern consultation room.
+
+Scene 2:
+A friendly pharmacist assists a customer at a pharmacy counter.
+
+Scene 3:
+A patient receives a sealed medicine bag and healthcare information from the pharmacist.
+
+Scene 4:
+The animated GOOD HOPE logo appears with a smooth fade and subtle floating effect.
+
+Animation requirements:
+- Smooth continuous movement.
+- Natural character transitions.
+- Clean 3D or high-quality Lottie animation.
+- Premium lighting.
+- Soft green and white background.
+- Subtle floating medical symbols.
+- Animated ECG-inspired decorative lines.
+
+Do not depict medical procedures, actual medication instructions or specific treatment claims.
+
+Use custom SVG, Lottie, CSS animations or lightweight Three.js elements depending on performance.
+
+If no suitable 3D asset exists, create a beautiful original animated SVG/Lottie scene instead of inserting unrelated stock imagery.
+
+Include a fallback static hero for slow internet connections.
+
+--------------------------------------------------
+4. PREMIUM ANIMATED UI AND BORDER EFFECTS
+--------------------------------------------------
+
+The website must have impressive but professional animation throughout.
+
+Animated borders:
+- Service card borders should have subtle moving green highlights.
+- Doctor card borders should illuminate gently on hover.
+- Appointment buttons should have elegant animated outlines.
+- Section separators can use flowing gradient lines.
+- Feature cards can have a subtle border-glow effect.
+
+Hover interactions:
+- Cards move slightly upward.
+- Images receive a subtle 3D perspective.
+- Buttons animate smoothly.
+- Doctor profile images have a gentle hover effect.
+- Service icons have minimal motion.
+
+Scrolling:
+- Smooth page scrolling.
+- Section reveal animations.
+- Gentle parallax effects.
+- Animated counters only for genuine numerical data.
+
+Do not overuse animations.
+
+Respect prefers-reduced-motion and provide a low-motion experience for accessibility.
+
+--------------------------------------------------
+5. WEBSITE HEADER
+--------------------------------------------------
+
+Create a premium responsive header.
+
+Left:
+GOOD HOPE circular logo.
+
+Navigation:
+- Home
+- About Us
+- Pharmacy
+- Our Doctors
+- Specialities
+- Book Appointment
+- Gallery
+- Contact
+
+Right:
+- Language selector
+- BOOK APPOINTMENT button.
+
+Make the header sticky with a clean scroll transition.
+
+Mobile version:
+- Hamburger navigation.
+- Touch-friendly menu.
+- Floating appointment CTA.
+- Tap-to-call phone action.
+
+--------------------------------------------------
+6. HOMEPAGE CONTENT
+--------------------------------------------------
+
+Build the following homepage sections:
+
+A. HERO SECTION
+Premium animated healthcare introduction.
+
+B. ABOUT GOOD HOPE
+Introduce GOOD HOPE PHARMACY and its healthcare services.
+
+C. WHY CHOOSE GOOD HOPE
+Create elegant feature cards:
+- Convenient pharmacy access.
+- Doctor consultation enquiries.
+- Multiple medical specialities.
+- Easy appointment booking.
+- Friendly customer experience.
+
+Do not make unsupported claims about medical outcomes.
+
+D. OUR SERVICES
+Display available service categories dynamically.
+
+E. DOCTORS AVAILABLE
+Display all eight doctor records listed in this brief.
+
+F. BOOK AN APPOINTMENT
+Interactive appointment booking section.
+
+G. PHARMACY SECTION
+Introduce the pharmacy and the in-store customer service experience.
+
+Do not create online medicine sales or medicine delivery functionality.
+
+H. OUR GALLERY
+Show owner-provided photographs.
+
+I. LOCATION AND CONTACT
+Show the verified address and contact information.
+
+J. FOOTER
+Professional footer with logo, navigation, address, telephone and policy links.
+
+--------------------------------------------------
+7. DOCTORS DIRECTORY – ALL EIGHT DOCTORS
+--------------------------------------------------
+
+Create a professional doctor directory.
+
+IMPORTANT:
+Include every doctor name below.
+
+The names and qualifications are transcribed from the client's uploaded doctor board. Create initial database records in an unverified/draft state. The administrator must verify all qualifications, registration information, professional descriptions and availability before publishing them.
+
+DOCTOR 1:
+
+Name: Dr. D.K. Gupta
+
+Department: ENT & Head-Neck Surgery
+
+Board description:
+Consultant ENT & Head-Neck Surgeon.
+Expert in Vertigo, Ear Disorders & Balance Treatment.
+
+Listed registration:
+WBMC-68227.
+
+Listed affiliation:
+District Hospital, Kalimpong.
+
+DOCTOR 2:
+
+Name: Dr. Sanjay Mazumder
+
+Department: Gynaecology & Obstetrics.
+
+Board qualifications:
+M.B.B.S., MS (OBST & GYNAE), FART, FMAS (DELHI), WBHS.
+
+Board specialities:
+- Gynaecologist.
+- Obstetrician.
+- Laparoscopic Surgeon.
+- Infertility Specialist.
+
+Preserve the printed qualifications for verification before publication.
+
+DOCTOR 3:
+
+Name: Dr. Ibrahim Shakuli
+
+Department: ENT.
+
+Board qualifications:
+MBBS, MS (ENT), Kolkata.
+
+Board description:
+Consultant ENT Surgeon.
+
+Listed registration:
+WBMC-55496.
+
+Listed affiliation:
+District Hospital, Kalimpong.
+
+DOCTOR 4:
+
+Name: Dr. Ayan Dutta
+
+Department: Child Specialist & Physician.
+
+Board qualifications:
+MBBS, MD (Pediatrics).
+
+Board description:
+Pediatrician & Neonatologist.
+
+Listed affiliation:
+District Hospital, Kalimpong.
+
+DOCTOR 5:
+
+Name: Dr. R.O. Karthak
+
+Department: Physician / Internal Medicine.
+
+Board qualifications:
+MBBS, Medical College NRS (Kolkata).
+M.D. Medicine (Physician).
+
+Listed registration:
+WBMC-59257.
+
+Listed affiliation:
+District Hospital, Kalimpong.
+
+DOCTOR 6:
+
+Name: Dr. Swarup Kumar Khan
+
+Department: Physiologist (exact speciality label printed on the board).
+
+Board qualification:
+MBBS.
+
+Listed affiliation:
+District Hospital, Kalimpong.
+
+IMPORTANT:
+Verify the exact professional speciality designation with the doctor before publishing.
+
+DOCTOR 7:
+
+Name: Dr. Krishanu Sarkar
+
+Department: Gynaecology & Obstetrics.
+
+Board qualifications:
+MBBS (Kolkata), DNB (G&O).
+
+Board speciality:
+Gynae, Obs & Infertility Specialist.
+
+DOCTOR 8:
+
+Name: Dr. Ramkrishna Karmakar
+
+Department:
+General Surgeon.
+
+Use these eight names as separate database records.
+
+Each doctor card should include:
+- Doctor name.
+- Professional photograph.
+- Speciality.
+- Verified qualification.
+- Registration details, where confirmed.
+- Short biography.
+- Consultation days.
+- Available appointment slots.
+- Appointment button.
+
+Create beautiful individual doctor profile pages.
+
+Admin must be able to add, update, deactivate or remove doctor records.
+
+Do not invent photographs, qualifications, professional registrations, ratings, experience or consultation schedules.
+
+When an actual photograph has not been supplied, use a neutral illustrated profile placeholder rather than pretending to show that doctor.
+
+--------------------------------------------------
+8. DEPARTMENT AND SERVICE MANAGEMENT
+--------------------------------------------------
+
+Create these initial service categories:
+
+1. ENT & Head-Neck Consultation.
+2. Vertigo, Ear Disorders & Balance Consultation.
+3. Gynaecology Consultation.
+4. Obstetrics Consultation.
+5. Laparoscopic Surgery Consultation.
+6. Infertility Consultation.
+7. Child Specialist Consultation.
+8. Pediatrics & Neonatology Consultation.
+9. Physician / Internal Medicine Consultation.
+10. General Surgery Consultation.
+11. Pharmacy Information & Customer Enquiry.
+
+Create each category as a separate service record.
+
+Every service must have:
+- Service name.
+- Category.
+- Description.
+- Associated doctor.
+- Duration.
+- Consultation fee.
+- Availability.
+- Active/inactive status.
+- Image or icon.
+- Display order.
+
+Consultation fees and appointment duration must be configurable by the administrator.
+
+Do not invent consultation prices or medical claims.
+
+The pharmacy page must be informational only.
+
+Do not create:
+- Online prescription medicine sales.
+- Medicine delivery.
+- Online drug ordering.
+- Medicine recommendations.
+- Prescription refills.
+- Controlled medicine catalogue.
+
+--------------------------------------------------
+9. FULL APPOINTMENT BOOKING SYSTEM
+--------------------------------------------------
+
+Build a real appointment booking system.
+
+This must be connected to Supabase PostgreSQL.
+
+Booking process:
+
+STEP 1:
+Choose a department.
+
+STEP 2:
+Select a service.
+
+STEP 3:
+Select a doctor.
+
+STEP 4:
+Select an appointment date.
+
+STEP 5:
+Show the genuinely available time slots.
+
+STEP 6:
+Customer details form.
+
+Required:
+- Customer full name.
+- Mobile number.
+- Selected department.
+- Selected doctor.
+- Selected service.
+- Appointment date.
+- Appointment time.
+
+Optional:
+- Email.
+- Short booking message.
+
+Do not request unnecessary sensitive health information.
+
+STEP 7:
+Show complete booking summary.
+
+STEP 8:
+Submit to the backend.
+
+STEP 9:
+Save the actual appointment in Supabase.
+
+STEP 10:
+Generate a unique booking reference.
+
+STEP 11:
+Show booking confirmation with the correct status.
+
+Booking statuses:
+- Pending
+- Confirmed
+- Cancelled
+- Completed
+- No-show
+
+A booking must show as confirmed only after the administrator confirms it or the configured confirmation workflow approves it.
+
+Prevent duplicate bookings.
+
+Never display a success message if the booking has not actually been stored.
+
+--------------------------------------------------
+10. DOCTOR SCHEDULE MANAGEMENT
+--------------------------------------------------
+
+Create an individual schedule for every doctor.
+
+Admin controls:
+- Weekly working days.
+- Starting time.
+- Ending time.
+- Consultation intervals.
+- Break periods.
+- Appointment duration.
+- Maximum daily bookings.
+- Doctor holidays.
+- Temporary unavailable periods.
+
+The administrator must be able to create different timings for different doctors.
+
+Do not use the pharmacy opening hours as doctor consultation hours.
+
+At launch, timings must remain unconfigured until approved by the business owner and doctors.
+
+--------------------------------------------------
+11. BUSINESS HOURS AND BLOCKED DATES
+--------------------------------------------------
+
+Create a professional business schedule management system.
+
+Separate settings for:
+- Pharmacy opening hours.
+- Doctor consultation hours.
+- Appointment booking hours.
+
+Admin can:
+- Set Monday to Sunday timings.
+- Set opening and closing hours.
+- Set breaks.
+- Block dates.
+- Block specific time slots.
+- Add holidays.
+- Temporarily close appointments.
+- Restore availability.
+
+Use Asia/Kolkata timezone.
+
+Blocked dates must not appear as bookable dates on the public website.
+
+--------------------------------------------------
+12. ADMIN DASHBOARD
+--------------------------------------------------
+
+Create a complete premium admin panel.
+
+Admin URL:
+/admin
+
+Create a separate secure login page.
+
+Admin dashboard design:
+- Green and navy sidebar.
+- White content area.
+- Premium dashboard cards.
+- Elegant charts.
+- Animated but subtle loading effects.
+- Responsive layout.
+
+Sidebar:
+
+1. Dashboard Overview
+2. Appointments
+3. Appointment Calendar
+4. Doctors
+5. Departments
+6. Services
+7. Customers
+8. Business Hours
+9. Doctor Availability
+10. Blocked Dates
+11. Gallery
+12. Website Content
+13. Notifications
+14. Reviews
+15. Map & Contact Settings
+16. Admin Profile
+17. Security Settings
+18. Logout
+
+Dashboard statistics:
+- Total Bookings.
+- Today's Bookings.
+- Pending Appointments.
+- Confirmed Appointments.
+- Cancelled Appointments.
+- Completed Appointments.
+- Total Customers.
+- Active Doctors.
+- Active Services.
+
+Create charts:
+- Daily appointments.
+- Weekly appointments.
+- Monthly bookings.
+- Department-wise appointments.
+- Booking status distribution.
+
+All numerical data must come from the actual database.
+
+Do not use fabricated dashboard statistics.
+
+--------------------------------------------------
+13. APPOINTMENT MANAGEMENT
+--------------------------------------------------
+
+Create a complete appointment management table.
+
+Columns:
+- Booking ID.
+- Customer.
+- Mobile number.
+- Doctor.
+- Service.
+- Date.
+- Time.
+- Status.
+- Created date.
+- Actions.
+
+Actions:
+- View details.
+- Confirm appointment.
+- Cancel appointment.
+- Reschedule appointment.
+- Mark completed.
+- Mark no-show.
+
+Support:
+- Search.
+- Filters.
+- Date range selection.
+- Status filtering.
+- Pagination.
+- Sorting.
+
+Admin changes must update the Supabase database.
+
+--------------------------------------------------
+14. CUSTOMER MANAGEMENT
+--------------------------------------------------
+
+Create a customer management section.
+
+Features:
+- View customers.
+- Search customers.
+- Search mobile numbers.
+- View appointment history.
+- View upcoming bookings.
+- View completed bookings.
+- View cancelled bookings.
+
+Keep every customer's data private.
+
+Only authenticated administrators can access full customer records.
+
+Public visitors must never be able to retrieve another customer's contact details or appointment history.
+
+--------------------------------------------------
+15. SUPABASE DATABASE ARCHITECTURE
+--------------------------------------------------
+
+Use Supabase PostgreSQL.
+
+Install:
+@supabase/supabase-js
+
+Create database migrations and proper relationships.
+
+Required tables:
+
+1. profiles
+2. admin_users
+3. doctors
+4. departments
+5. services
+6. customers
+7. appointments
+8. business_hours
+9. doctor_availability
+10. blocked_dates
+11. gallery
+12. notifications
+13. site_settings
+14. audit_logs
+
+Use:
+- UUID primary keys.
+- Foreign keys.
+- Created timestamps.
+- Updated timestamps.
+- Proper indexes.
+- Unique constraints.
+- Referential integrity.
+
+Appointment table must contain:
+- Booking reference.
+- Customer ID.
+- Doctor ID.
+- Department ID.
+- Service ID.
+- Appointment date.
+- Start time.
+- End time.
+- Booking status.
+- Customer message.
+- Created timestamp.
+
+Implement secure server-side validation.
+
+Prevent double booking at database level through transactional booking logic.
+
+Use an atomic database operation that checks doctor availability, blocked periods and existing appointments before saving a new appointment.
+
+Do not rely only on frontend validation.
+
+--------------------------------------------------
+16. LOGIN AND AUTHENTICATION
+--------------------------------------------------
+
+Use Supabase Authentication.
+
+Implement:
+- Admin email/password login.
+- Secure session handling.
+- Protected admin pages.
+- Logout.
+- Password recovery.
+- Role-based access.
+- Secure server-side authorization.
+
+Disable public admin registration.
+
+Create the first admin account through a controlled setup procedure.
+
+Never hardcode passwords.
+
+Never expose privileged Supabase keys in frontend code.
+
+--------------------------------------------------
+17. DATABASE SECURITY AND RLS
+--------------------------------------------------
+
+Enable Row Level Security.
+
+Create proper policies for every exposed table.
+
+Requirements:
+- Visitors can read only approved public doctor profiles and active services.
+- Visitors cannot read all customer records.
+- Visitors cannot access other appointment records.
+- Only authorised administrators can modify doctors, services and schedules.
+- Only authorised administrators can access the dashboard.
+- Public booking insertion must go through secure validation.
+- Private customer data must never be included in public API responses.
+
+Store service-role secrets only on the server.
+
+--------------------------------------------------
+18. GOOGLE AI STUDIO TECHNICAL ARCHITECTURE
+--------------------------------------------------
+
+Build the application using:
+
+Frontend:
+- React.
+- TypeScript.
+- Modern component architecture.
+- Responsive CSS.
+- Reusable components.
+- React Router.
+
+Animation:
+- Framer Motion where appropriate.
+- Lottie animations.
+- CSS keyframes.
+- SVG illustrations.
+- Optional lightweight Three.js hero animation.
+
+Backend:
+- Node.js server runtime.
+- Server-side booking API.
+- Secure validation.
+- Supabase integration.
+- Proper error handling.
+
+Use a professional project structure:
+
+src/
+  components/
+  pages/
+  admin/
+  doctors/
+  appointments/
+  services/
+  hooks/
+  lib/
+  styles/
+  types/
+
+server/
+  api/
+  middleware/
+  services/
+  validation/
+
+supabase/
+  migrations/
+  seed.sql/
+
+Create:
+- .env.example
+- README.md
+- Database setup guide.
+- Deployment guide.
+- Security documentation.
+
+Environment variable names:
+
+SUPABASE_URL
+SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SECRET_KEY
+
+Use the publishable key for safe browser operations.
+
+Use the secret key exclusively in authenticated server-side operations.
+
+--------------------------------------------------
+19. PHOTO GALLERY
+--------------------------------------------------
+
+Use the two photographs supplied by the business owner as initial visual assets.
+
+Gallery categories:
+- Pharmacy exterior.
+- Pharmacy signboard.
+- GOOD HOPE logo.
+- Doctor availability board.
+- Healthcare environment.
+
+Create a premium gallery with:
+- Responsive image grid.
+- Lightbox.
+- Smooth hover transitions.
+- Animated image borders.
+- Mobile-friendly layouts.
+
+Admin features:
+- Upload images.
+- Delete images.
+- Add captions.
+- Rearrange image order.
+- Publish/unpublish images.
+
+Use Supabase Storage with proper security rules.
+
+Do not invent photographs of real doctors.
+
+--------------------------------------------------
+20. CONTACT AND LOCATION PAGE
+--------------------------------------------------
+
+Create a beautiful contact page.
+
+Display:
+
+GOOD HOPE PHARMACY
+
+Owner:
+Sudarshan Karkee
+
+Telephone:
++91 75859 76561
+
+Location:
+3FCC+MF, Kalimpong, West Bengal, India.
+
+Additional editable address:
+KD Pradhan Road, Kalimpong Bazar, Kalimpong, West Bengal 734301.
+
+Add:
+- Call Now button.
+- Contact enquiry form.
+- Appointment enquiry CTA.
+- Map section.
+- Business hours.
+- Social media link.
+
+Google Maps must use an administrator-configured Good Hope location URL.
+
+If the exact pin has not been verified, display the address text and a map-search link based on the provided plus code. Do not embed another business's map or claim the location has been verified.
+
+Add the Facebook profile link only if the owner approves its public display.
+
+--------------------------------------------------
+21. MULTILINGUAL WEBSITE
+--------------------------------------------------
+
+Add a language switcher:
+
+- English.
+- Bengali.
+- Nepali.
+- Hindi.
+
+Default language: English.
+
+Translate:
+- Navigation.
+- Service names.
+- Doctor sections.
+- Booking forms.
+- Validation errors.
+- Confirmation messages.
+- Contact details.
+- Footer.
+
+Use proper fonts for each language.
+
+Ensure all languages remain readable on desktop and mobile.
+
+--------------------------------------------------
+22. REVIEWS AND TESTIMONIALS
+--------------------------------------------------
+
+Create a reviews section that supports verified customer feedback.
+
+Only display genuine reviews approved for publication.
+
+Do not:
+- Invent Google reviews.
+- Fabricate ratings.
+- Add fictional customer names.
+- Display fake testimonials.
+- Claim a verified rating without a valid source.
+
+Allow admin to add, review, approve and hide customer feedback.
+
+Make the Google review link configurable in admin settings.
+
+Keep the reviews section hidden when there is no verified feedback.
+
+--------------------------------------------------
+23. SEO AND GOOGLE SEARCH
+--------------------------------------------------
+
+Build strong technical and local SEO.
+
+Implement:
+- Unique page title.
+- Meta description.
+- Canonical URL.
+- XML sitemap.
+- Robots.txt.
+- Open Graph metadata.
+- Image alt attributes.
+- Fast loading.
+- Responsive design.
+- Local business schema using the correct verified category.
+- Doctor profile SEO.
+- Service page SEO.
+- Kalimpong local search content.
+
+Use consistent business information across the website.
+
+Do not claim that SEO guarantees a number-one Google position.
+
+--------------------------------------------------
+24. PRIVACY AND LEGAL PAGES
+--------------------------------------------------
+
+Create:
+- Privacy Policy.
+- Terms and Conditions.
+- Appointment Policy.
+- Cancellation Policy.
+
+Explain that customer information is collected only for managing enquiries and appointments.
+
+Collect the minimum information necessary.
+
+Do not collect unnecessary medical records or sensitive medical documents.
+
+The website must not provide medical diagnosis or treatment advice.
+
+--------------------------------------------------
+25. MOBILE RESPONSIVE DESIGN
+--------------------------------------------------
+
+The website must work perfectly on:
+
+- Desktop.
+- Laptop.
+- Tablet.
+- Android.
+- iPhone.
+
+Check:
+- Navigation.
+- Animated hero.
+- Doctor directory.
+- Booking forms.
+- Calendar.
+- Time slot selection.
+- Admin dashboard.
+- Gallery.
+- Footer.
+
+Ensure animations do not make mobile devices slow.
+
+--------------------------------------------------
+26. NOTIFICATION SYSTEM
+--------------------------------------------------
+
+Create a notification workflow.
+
+When an appointment is submitted:
+- Save the booking.
+- Generate the reference.
+- Create an admin notification.
+- Display the actual booking status.
+
+When an appointment is confirmed or cancelled:
+- Update the database.
+- Update the booking status.
+- Trigger email or WhatsApp notification if configured.
+
+WhatsApp Business API and email integration must remain optional until valid credentials are provided.
+
+Never display a false message-sent confirmation.
+
+--------------------------------------------------
+27. FINAL QUALITY CONTROL
+--------------------------------------------------
+
+Test the whole system.
+
+Verify:
+
+1. Website loads correctly.
+2. GOOD HOPE logo and colours are consistent.
+3. All eight doctor records exist.
+4. Doctor profiles can be managed.
+5. Services can be added and edited.
+6. Booking forms work.
+7. Real bookings are saved in Supabase.
+8. Database prevents overlapping appointments.
+9. Blocked dates cannot be booked.
+10. Doctor schedules work independently.
+11. Admin login is secure.
+12. Admin can confirm appointments.
+13. Admin can update services.
+14. Admin can edit customer records safely.
+15. Public users cannot see private booking data.
+16. Map location is configurable.
+17. Animations work on mobile.
+18. Website has no broken links.
+19. All buttons work.
+20. No fabricated business claims are shown.
+
+If Supabase credentials are not yet supplied, prepare all integration code and migration files, but clearly indicate that the live backend is awaiting connection.
+
+Never pretend that a demo booking is a real appointment.
+
+--------------------------------------------------
+28. FINAL DELIVERY
+--------------------------------------------------
+
+Deliver a complete working application for the real client.
+
+Required final modules:
+
+- Premium GOOD HOPE website.
+- Logo-based responsive design.
+- Animated healthcare homepage.
+- Animated borders and hover effects.
+- 3D/Lottie doctor-patient animation.
+- Eight-doctor directory.
+- Department management.
+- Service management.
+- Real appointment booking.
+- Date and time selection.
+- Doctor scheduling.
+- Blocked dates.
+- Business-hours management.
+- Admin dashboard.
+- Customer management.
+- Secure authentication.
+- Supabase PostgreSQL.
+- Row Level Security.
+- Photo gallery.
+- Contact page.
+- Google Maps configuration.
+- Multilingual support.
+- Technical SEO.
+- Privacy pages.
+- Setup and deployment documentation.
+
+FINAL DESIGN DIRECTION:
+
+GOOD HOPE must feel like a modern, premium, trustworthy healthcare brand.
+
+Use the uploaded circular logo as the design foundation.
+
+Make the website visually exceptional, with subtle cinematic healthcare animations, premium typography, clean white layouts, green and navy visual hierarchy, and animated borders.
+
+Most importantly, make every major website feature genuinely functional and connected to the real Supabase backend.
+
+Do not stop at the homepage.
+
+Build the complete application, connect the database, implement the booking workflow, test the admin dashboard, and fix errors before declaring the project complete.
+
+PROJECT:
+GOOD HOPE PHARMACY – KALIMPONG
+
+OWNER:
+SUDARSHAN KARKEE (CLIENT-PROVIDED SPELLING)
+
+PRIMARY CONTACT:
++91 75859 76561
+
+BRAND:
+GREEN + NAVY + RED + WHITE
+
+PLATFORM:
+GOOGLE AI STUDIO + REACT + TYPESCRIPT + NODE.JS + SUPABASE
+
+OBJECTIVE:
+A PREMIUM, ANIMATED, FULLY FUNCTIONAL HEALTHCARE WEBSITE WITH REAL APPOINTMENT BOOKING AND ADMIN MANAGEMENT.
